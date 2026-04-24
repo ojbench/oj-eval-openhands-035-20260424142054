@@ -66,7 +66,6 @@ public:
             std::memcpy(small_buffer, other.small_buffer, length + 1);
         } else {
             heap_ptr = other.heap_ptr;
-            other.heap_ptr = nullptr;
         }
         other.length = 0;
         other.cap = SSO_CAPACITY;
@@ -86,7 +85,6 @@ public:
                 std::memcpy(small_buffer, other.small_buffer, length + 1);
             } else {
                 heap_ptr = other.heap_ptr;
-                other.heap_ptr = nullptr;
             }
             
             other.length = 0;
@@ -186,6 +184,10 @@ public:
         return data_ptr()[index];
     }
     
+    const char& operator[](size_t index) const {
+        return data_ptr()[index];
+    }
+    
     MyString operator+(const MyString& rhs) const {
         MyString result;
         size_t new_len = length + rhs.length;
@@ -225,6 +227,13 @@ public:
     }
     
     const char& at(size_t pos) const {
+        if (pos >= length) {
+            throw std::out_of_range("Index out of range");
+        }
+        return data_ptr()[pos];
+    }
+    
+    char& at(size_t pos) {
         if (pos >= length) {
             throw std::out_of_range("Index out of range");
         }
